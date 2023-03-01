@@ -173,7 +173,7 @@ Vue.component('Columns3', {
 
 Vue.component('create_card', {
     template: `
-       <form  @submit.prevent="createCard">
+       <form>
     <div class="form_create">
          <label for="name">Добавить заметку:</label>
         <input class="form_input" id="task" v-model="name" required placeholder="task">
@@ -198,7 +198,7 @@ Vue.component('create_card', {
              <label for="name">Добавить задачу:</label>
              <input class="form_input" id="task5" v-model="name5" placeholder="task">
          </div>
-         <input class="fort_submit" type="submit" value="Добавить"> 
+         <input @click="createCard" class="ford_submit" type="button" value="Добавить">
      </div>
        </form>`,
     data() {
@@ -250,12 +250,5 @@ let app = new Vue({
     el: '#app',
     data: {
     },
-    props: {
-        columnThird:{
-            type: Array,
-            required: false
-
-        }
-
-    }
+    
 })
