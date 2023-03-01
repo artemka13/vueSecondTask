@@ -36,7 +36,9 @@ li{
     margin: 2rem auto;
 }
 .done{
-    text-decoration: line-through
+    text-decoration: line-through;
+    text-decoration-color: black;
+    text-decoration-thickness: 2px
 }
 .form_div{
     display: flex;
