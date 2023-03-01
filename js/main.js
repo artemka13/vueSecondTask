@@ -1,4 +1,5 @@
 let eventBus = new Vue()
+let eventBusTwo = new Vue()
 Vue.component('Cards', {
     template: `
        <div class="Cards">
@@ -57,9 +58,9 @@ Vue.component('Columns1', {
                     <li v-for="task in column.arrTask" v-if="task.title != null" >
                             <strong>{{task.id}}</strong>
                             <input type="checkbox" 
-                            v-on:change="task.completed = true" 
+                            task.completed = "true" 
                             :disabled="task.completed" 
-                            v-on:change='colume.status +=1'
+                            v-on:change="column.status += 1"
                             @change.prevent="updateColumn(column)">
                             <span :class="{done: task.completed}" >{{task.title}}</span>
                     </li>
@@ -104,9 +105,9 @@ Vue.component('Columns2', {
                     <li v-for="task in column.arrTask" v-if="task.title != null" >
                             <strong>{{task.id}}</strong>
                             <input type="checkbox" 
-                            v-on:change="task.completed = true" 
+                            task.completed = "true" 
                             :disabled="task.completed" 
-                            v-on:change='column.status += 1'
+                            v-on:change="column.status += 1"
                             @change.prevent="updateColumnTwo(column)"
                             >
                             <span :class="{done: task.completed}" >{{task.title}}</span>
@@ -176,19 +177,19 @@ Vue.component('create_card', {
        <form>
     <div class="form_create">
          <label for="name">Добавить заметку:</label>
-        <input class="form_input" id="task" v-model="name" required placeholder="task">
+        <input class="form_input" id="task" v-model="name" placeholder="task">
         <hr>
          <div class="form_div">
              <label for="name">Добавить задачу:</label>
-             <input class="form_input" id="task1" v-model="name1" required placeholder="task">
+             <input class="form_input" id="task1" v-model="name1" placeholder="task">
          </div>
          <div class="form_div">
              <label for="name">Добавить задачу:</label>
-             <input class="form_input" id="task2" v-model="name2" required placeholder="task">
+             <input class="form_input" id="task2" v-model="name2" placeholder="task">
          </div>
          <div class="form_div">
              <label for="name">Добавить задачу:</label>
-             <input class="form_input" id="task3" v-model="name3" required placeholder="task">
+             <input class="form_input" id="task3" v-model="name3" placeholder="task">
          </div>
          <div class="form_div">
              <label for="name">Добавить задачу:</label>
@@ -198,9 +199,11 @@ Vue.component('create_card', {
              <label for="name">Добавить задачу:</label>
              <input class="form_input" id="task5" v-model="name5" placeholder="task">
          </div>
-         <input @click="createCard" class="ford_submit" type="button" value="Добавить">
+         <!--        <input @click="createCard" class="ford_submit" type="button" value="Добавить">-->
+        <button @click="createCard" class="ford_submit" type="button" >Добавить</button>
      </div>
-       </form>`,
+       </form>
+`,
     data() {
         return {
             name: null,
@@ -226,13 +229,13 @@ Vue.component('create_card', {
                     data: null,
                     status: 0
                 }
-                eventBus.$emit('card-submitted', card),
-                    this.name = null,
-                    this.arrTask = null,
-                    this.name1 = null,
-                    this.name2 = null,
-                    this.name3 = null,
-                    this.name4 = null,
+                eventBus.$emit('card-submitted', card)
+                    this.name = null
+                    this.arrTask = null
+                    this.name1 = null
+                    this.name2 = null
+                    this.name3 = null
+                    this.name4 = null
                     this.name5 = null
             },
 
@@ -250,5 +253,5 @@ let app = new Vue({
     el: '#app',
     data: {
     },
-    
+
 })
