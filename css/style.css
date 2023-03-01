@@ -35,10 +35,6 @@ li{
     width: 50%;
     margin: 2rem auto;
 }
-.doneInput{
-    background-color: greenyellow;
-
-}
 .done{
     text-decoration: line-through
 }

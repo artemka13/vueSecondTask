@@ -27,11 +27,11 @@ Vue.component('Cards', {
     mounted() {
         eventBus.$on('card-submitted', card => {
             if(this.columnFirst.length < 3){this.columnFirst.push(card)}
-
+            console.log(this.columnFirst)
         })
-    },
-    methods: {
-
+        eventBusTwo.$on('addColumnSecond', card => {
+            if(this.columnSecond.length < 5){this.columnSecond.push(card)}
+        })
     },
 })
 
@@ -44,7 +44,9 @@ Vue.component('Columns1', {
                             <strong>{{task.id}}</strong>
                             <input type="checkbox" 
                             v-on:change="task.completed = true" 
-                            :disabled="task.completed" >
+                            :disabled="task.completed" 
+                            v-on:change='colume.status +=1'
+                            @change.prevent="updateColumn(column)">
                             <span :class="{done: task.completed}" >{{task.title}}</span>
                     </li>
                 </span>
@@ -56,12 +58,22 @@ Vue.component('Columns1', {
             type: Array,
             required: false
 
-        },
-        arrTask: {
-            type: Array,
-            required: false
         }
 
+    },
+    methods: {
+        updateColumn(card) {
+            let cardTask = 0
+            for(let i = 0; i < 5; i++){
+                if (card.arrTask[i].title != null) {
+                    cardTask++
+                }
+            }
+            if ((card.status / cardTask) * 100 >= 50) {
+                eventBusTwo.$emit('addColumnSecond', card)
+            }
+
+        },
     },
 
 })
@@ -108,24 +120,29 @@ Vue.component('create_card', {
 
         }
     },
-    methods:{
-        createCard() {
-            let card = {
-                name: this.name,
-                data: null,
-                status: 0
-
-            }
-            eventBus.$emit('card-submitted', card),
-                this.name = null,
-                this.arrTask = null,
-                this.name1 = null,
-                this.name2 = null,
-                this.name3 = null,
-                this.name4 = null,
-                this.name5 = null
-
-        },
+        methods: {
+            createCard() {
+                let card = {
+                    name: this.name,
+                    arrTask: [ { id: 1, title: this.name1, completed: false},
+                        {id: 2, title: this.name2, completed: false},
+                        {id: 3, title: this.name3, completed: false},
+                        {id: 4, title: this.name4, completed: false},
+                        {id: 5, title: this.name5, completed: false},
+                    ],
+                    data: null,
+                    status: 0
+                }
+                eventBus.$emit('card-submitted', card),
+                    this.name = null,
+                    this.arrTask = null,
+                    this.name1 = null,
+                    this.name2 = null,
+                    this.name3 = null,
+                    this.name4 = null,
+                    this.name5 = null
+            },
+            
     },
     props: {
         columnFirst:{
