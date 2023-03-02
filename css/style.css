@@ -50,17 +50,20 @@ label{
     margin: 0 2em;
 }
 .form_input{
-    border: 2px solid cadetblue;
+    border: 2px solid #394242;
     border-radius: 1em;
     padding: 5px 10px;
 }
-.fort_submit{
-    border: 2px solid cadetblue;
-    background-color: cadetblue;
-    color: white;
+.form_submit{
+    border: 2px solid #394242;
+    background-color: white;
+    color: black;
     border-radius: 1em;
     padding: 10px 15px;
 }
 input,select {
     margin-left: 10px;
+}
+.numberOne {
+    margin-top: 15px;
 }

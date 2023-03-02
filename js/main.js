@@ -6,15 +6,15 @@ Vue.component('Cards', {
        <create_card></create_card>
            <div class="cards_inner">
                 <div class="cards_item">
-                    <h2>Новые</h2>
+                    <h2>Первый столбец</h2>
                     <columns1 :columnFirst="columnFirst"></columns1>
                 </div>
                 <div class="cards_item">
-                    <h2>В процессе</h2>
+                    <h2>Второй столбец</h2>
                     <columns2 :columnSecond="columnSecond"></columns2>
                 </div>
                 <div class="cards_item">
-                    <h2>Завершенные</h2>
+                    <h2>Третий столбец</h2>
                     <columns3 :columnThird="columnThird"></columns3>
                 </div>
            </div>
@@ -172,31 +172,31 @@ Vue.component('create_card', {
     template: `
        <form @submit.prevent="createCard">
     <div class="form_create">
-         <label for="name">Добавить заметку:</label>
-        <input class="form_input" id="task" v-model="name" placeholder="task"/>
-        <hr>
-         <div>
-             <label for="name">Добавить задачу:</label>
-             <input class="form_input" id="task1" v-model="name1" placeholder="task"/>
+         <label for="name">Напишите название:</label>
+        <input class="form_input" id="task" v-model="name" placeholder="Введите название"/>
+
+         <div class="numberOne">
+             <label for="name">Добавить задачу №1:</label>
+             <input class="form_input" id="task1" v-model="name1" placeholder="Введите задачу"/>
          </div>
          <div class="form_div">
-             <label for="name">Добавить задачу:</label>
-             <input class="form_input" id="task2" v-model="name2" placeholder="task"/>
+             <label for="name">Добавить задачу №2:</label>
+             <input class="form_input" id="task2" v-model="name2" placeholder="Введите задачу"/>
          </div>
          <div class="form_div">
-             <label for="name">Добавить задачу:</label>
-             <input class="form_input" id="task3" v-model="name3" placeholder="task"/>
+             <label for="name">Добавить задачу №3:</label>
+             <input class="form_input" id="task3" v-model="name3" placeholder="Введите задачу"/>
          </div>
          <div class="form_div">
-             <label for="name">Добавить задачу:</label>
-             <input class="form_input" id="task4" v-model="name4" placeholder="task">
+             <label for="name">Добавить задачу №4:</label>
+             <input class="form_input" id="task4" v-model="name4" placeholder="Введите задачу">
          </div>
          <div class="form_div">
-             <label for="name">Добавить задачу:</label>
-             <input class="form_input" id="task5" v-model="name5" placeholder="task">
+             <label for="name">Добавить задачу №5:</label>
+             <input class="form_input" id="task5" v-model="name5" placeholder="Введите задачу">
          </div>
-        <button class="ford_submit">Добавить</button>
-     </p>
+        <button class="form_submit">Добавить</button>
+     </div>
        </form>
 `,
     data() {
