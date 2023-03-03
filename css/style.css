@@ -23,17 +23,19 @@ h1 {
     text-align: center;
 }
 li{
-    border: 2px solid cadetblue;
+    border: 2px solid #394242;
     display: flex;
     justify-content: space-around;
     padding: .5em 2rem;
     margin: 1rem;
     border-radius: 1em;
+
 }
 .column_div{
-    border: 2px solid cadetblue;
+    border: 2px solid #394242;
     width: 50%;
     margin: 2rem auto;
+    border-radius: 1em;
 }
 .done{
     text-decoration: line-through;
