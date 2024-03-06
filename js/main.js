@@ -168,36 +168,53 @@ Vue.component('Columns3', {
 
 })
 
-Vue.component('create_card', {
+Vue.component('modalWindow', {
     template: `
-       <form @submit.prevent="createCard">
-    <div class="form_create">
-         <label for="name">Напишите название:</label>
-        <input class="form_input" id="task" v-model="name" placeholder="Введите название"/>
+      <section>
+        <div class="bu">
+          <a href="#openModal" class="btn btnModal">Создать карточку</a>
+        </div>
+        <div id="openModal" class="modal">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h3 class="modal-title">Создание карточки</h3>
+                <a href="#close" title="Close" class="close">×</a>
+              </div>
+              <div class="modal-body">
+                <form @submit.prevent="createCard">
+                  <div class="form_create">
+                    <label for="name">Напишите название:</label>
+                    <input class="form_input" id="task" v-model="name" placeholder="Введите название"/>
 
-         <div class="numberOne">
-             <label for="name">Добавить задачу №1:</label>
-             <input class="form_input" id="task1" v-model="name1" placeholder="Введите задачу"/>
-         </div>
-         <div class="form_div">
-             <label for="name">Добавить задачу №2:</label>
-             <input class="form_input" id="task2" v-model="name2" placeholder="Введите задачу"/>
-         </div>
-         <div class="form_div">
-             <label for="name">Добавить задачу №3:</label>
-             <input class="form_input" id="task3" v-model="name3" placeholder="Введите задачу"/>
-         </div>
-         <div class="form_div">
-             <label for="name">Добавить задачу №4:</label>
-             <input class="form_input" id="task4" v-model="name4" placeholder="Введите задачу">
-         </div>
-         <div class="form_div">
-             <label for="name">Добавить задачу №5:</label>
-             <input class="form_input" id="task5" v-model="name5" placeholder="Введите задачу">
-         </div>
-        <button class="form_submit">Добавить</button>
-     </div>
-       </form>
+                    <div class="numberOne">
+                      <label for="name">Добавить задачу №1:</label>
+                      <input class="form_input" id="task1" v-model="name1" placeholder="Введите задачу"/>
+                    </div>
+                    <div class="form_div">
+                      <label for="name">Добавить задачу №2:</label>
+                      <input class="form_input" id="task2" v-model="name2" placeholder="Введите задачу"/>
+                    </div>
+                    <div class="form_div">
+                      <label for="name">Добавить задачу №3:</label>
+                      <input class="form_input" id="task3" v-model="name3" placeholder="Введите задачу"/>
+                    </div>
+                    <div class="form_div">
+                      <label for="name">Добавить задачу №4:</label>
+                      <input class="form_input" id="task4" v-model="name4" placeholder="Введите задачу">
+                    </div>
+                    <div class="form_div">
+                      <label for="name">Добавить задачу №5:</label>
+                      <input class="form_input" id="task5" v-model="name5" placeholder="Введите задачу">
+                    </div>
+                    <button class="form_submit">Добавить</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 `,
     data() {
         return {
@@ -242,6 +259,16 @@ Vue.component('create_card', {
 
         },
     },
+})
+
+Vue.component('create_card', {
+    template: `
+<section id="main" class="main-alt">
+<div class="form__control">
+<modalWindow/>
+</div>
+</section>
+`,
 })
 
 let app = new Vue({
