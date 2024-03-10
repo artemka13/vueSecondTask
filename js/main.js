@@ -7,15 +7,15 @@ Vue.component('Cards', {
            <div class="cards_inner">
                 <div class="cards_item">
                     <h2>Первый столбец</h2>
-                    <columns1 :columnFirst="columnFirst"></columns1>
+                    <columns1 :saveLocal="saveLocal" :columnFirst="columnFirst"></columns1>
                 </div>
                 <div class="cards_item">
                     <h2>Второй столбец</h2>
-                    <columns2 :columnSecond="columnSecond"></columns2>
+                    <columns2 :saveLocal="saveLocal" :columnSecond="columnSecond"></columns2>
                 </div>
                 <div class="cards_item">
                     <h2>Третий столбец</h2>
-                    <columns3 :columnThird="columnThird"></columns3>
+                    <columns3 :saveLocal="saveLocal" :columnThird="columnThird"></columns3>
                 </div>
            </div>
        </div>`,
@@ -46,7 +46,17 @@ Vue.component('Cards', {
             this.columnThird.push(card)
             this.columnFirst.splice(this.columnFirst.indexOf(card), 1)
         })
+        this.columnFirst = JSON.parse(localStorage.getItem("columnFirst"))
+        this.columnSecond = JSON.parse(localStorage.getItem("columnSecond"))
+        this.columnThird = JSON.parse(localStorage.getItem("columnThird"))
     },
+    methods: {
+        saveLocal() {
+            localStorage.setItem('columnFirst', JSON.stringify(this.columnFirst))
+            localStorage.setItem('columnSecond', JSON.stringify(this.columnSecond))
+            localStorage.setItem('columnThird', JSON.stringify(this.columnThird))
+        }
+    }
 })
 
 Vue.component('Columns1', {
@@ -71,6 +81,13 @@ Vue.component('Columns1', {
         columnFirst:{
             type: Array,
 
+        },
+        columnSecond:{
+            type: Array,
+
+        },
+        saveLocal: {
+            type: Function
         }
 
     },
@@ -89,7 +106,7 @@ Vue.component('Columns1', {
                 card.data = new Date().toLocaleString()
                 eventBus.$emit('addColumnOneThird', card)
             }
-
+            this.saveLocal()
         },
     },
 
@@ -117,6 +134,9 @@ Vue.component('Columns2', {
         columnSecond:{
             type: Array,
 
+        },
+        saveLocal: {
+            type: Function
         }
 
     },
@@ -132,7 +152,7 @@ Vue.component('Columns2', {
                 card.data = new Date().toLocaleString()
                 eventBus.$emit('addColumnThird', card)
             }
-
+            this.saveLocal()
         },
     },
 
@@ -159,13 +179,8 @@ Vue.component('Columns3', {
         columnThird:{
             type: Array,
 
-        }
-
+        },
     },
-    methods: {
-
-    }
-
 })
 
 Vue.component('modalWindow', {
@@ -207,7 +222,7 @@ Vue.component('modalWindow', {
                       <label for="name">Добавить задачу №5:</label>
                       <input class="form_input" id="task5" v-model="name5" placeholder="Введите задачу">
                     </div>
-                    <button class="form_submit">Добавить</button>
+                    <button class="form_submit" @click="persist">Добавить</button>
                   </div>
                 </form>
               </div>
@@ -250,14 +265,33 @@ Vue.component('modalWindow', {
                     this.name4 = null
                     this.name5 = null
             },
+            persist() {
+                localStorage.name = this.name;
+                localStorage.name1 = this.name1;
+                localStorage.name2 = this.name2;
+                localStorage.name3 = this.name3;
+                localStorage.name4 = this.name4;
+                localStorage.name5 = this.name5;
+            }
 
     },
+    mounted() {
+        if(localStorage.name) this.name = localStorage.name;
+        if(localStorage.name1) this.name1 = localStorage.name1;
+        if(localStorage.name2) this.name2 = localStorage.name2;
+        if(localStorage.name3) this.name3 = localStorage.name3;
+        if(localStorage.name4) this.name4 = localStorage.name4;
+        if(localStorage.name5) this.name5 = localStorage.name5;
+    },
+
     props: {
         columnFirst:{
             type: Array,
             required: false,
-
         },
+        saveLocal: {
+            type: Function
+        }
     },
 })
 
