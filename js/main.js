@@ -255,8 +255,6 @@ Vue.component('modalWindow', {
             name4:null,
             name5:null,
             errors: [],
-
-
         }
     },
         methods: {
