@@ -29,6 +29,7 @@ Vue.component('Cards', {
         }
     },
     mounted() {
+        this.loadLocal()
         eventBus.$on('card-submitted', card => {
             this.errors = []
             if(this.columnFirst.length < 3){
@@ -36,6 +37,7 @@ Vue.component('Cards', {
             }else {
                 this.errors.push('В первой колонке нельзя добавить больше 3-х карточек.')
             }
+            this.saveLocal()
         })
         eventBus.$on('addColumnSecond', card => {
             this.errors = []
@@ -52,6 +54,7 @@ Vue.component('Cards', {
                     })
                 }
             }
+            this.saveLocal()
         })
         eventBus.$on('addColumnThird', card =>{
             this.columnThird.push(card)
@@ -66,6 +69,7 @@ Vue.component('Cards', {
                     })
                 }
             }
+            this.saveLocal()
         })
         eventBus.$on('addColumnOneThird', card =>{
 
@@ -75,8 +79,26 @@ Vue.component('Cards', {
                 this.columnThird.push(card)
                 this.columnFirst.splice(this.columnFirst.indexOf(card), 1)
             }
+            this.saveLocal()
         })
 
+    },
+    methods: {
+        saveLocal() {
+            localStorage.setItem('cards', JSON.stringify({
+                columnFirst: this.columnFirst,
+                columnSecond: this.columnSecond,
+                columnThird: this.columnThird,
+            }))
+        },
+        loadLocal() {
+            const data = JSON.parse(localStorage.getItem('cards'))
+            if (data) {
+                this.columnFirst = data.columnFirst
+                this.columnSecond = data.columnSecond
+                this.columnThird = data.columnThird
+            }
+        },
     },
 
 })
@@ -110,6 +132,9 @@ Vue.component('Columns1', {
         },
         errors: {
             type: Array,
+        },
+        saveLocal: {
+            type: Function
         }
     },
     methods: {
@@ -127,6 +152,7 @@ Vue.component('Columns1', {
                 card.data = new Date().toLocaleString()
                 eventBus.$emit('addColumnOneThird', card)
             }
+            this.saveLocal()
         },
     },
 
@@ -155,6 +181,9 @@ Vue.component('Columns2', {
             type: Array,
 
         },
+        saveLocal: {
+            type: Function
+        }
     },
     methods: {
         updateColumnTwo(card) {
@@ -168,6 +197,7 @@ Vue.component('Columns2', {
                 card.data = new Date().toLocaleString()
                 eventBus.$emit('addColumnThird', card)
             }
+            this.saveLocal()
         },
     },
 
@@ -195,6 +225,9 @@ Vue.component('Columns3', {
             type: Array,
 
         },
+        saveLocal: {
+            type: Function
+        }
     },
 })
 
@@ -279,6 +312,7 @@ Vue.component('modalWindow', {
                     this.name3 = null
                     this.name4 = null
                     this.name5 = null
+                    this.saveLocal()
             },
     },
 
