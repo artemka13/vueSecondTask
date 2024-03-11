@@ -180,3 +180,6 @@ input,select {
     display: flex;
     justify-content: center;
 }
+.error {
+    text-align: center;
+}

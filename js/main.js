@@ -4,18 +4,19 @@ Vue.component('Cards', {
        <div class="Cards">
        <h1>Заметки</h1>
        <create_card></create_card>
+       <p class="error" v-for="error in errors">{{ error }}</p>
            <div class="cards_inner">
                 <div class="cards_item">
                     <h2>Первый столбец</h2>
-                    <columns1 :saveLocal="saveLocal" :columnFirst="columnFirst"></columns1>
+                    <columns1 :columnFirst="columnFirst"></columns1>
                 </div>
                 <div class="cards_item">
                     <h2>Второй столбец</h2>
-                    <columns2 :saveLocal="saveLocal" :columnSecond="columnSecond"></columns2>
+                    <columns2 :columnSecond="columnSecond"></columns2>
                 </div>
                 <div class="cards_item">
                     <h2>Третий столбец</h2>
-                    <columns3 :saveLocal="saveLocal" :columnThird="columnThird"></columns3>
+                    <columns3 :columnThird="columnThird"></columns3>
                 </div>
            </div>
        </div>`,
@@ -24,39 +25,60 @@ Vue.component('Cards', {
             columnFirst:[],
             columnSecond:[],
             columnThird:[],
+            errors: []
         }
     },
     mounted() {
         eventBus.$on('card-submitted', card => {
+            this.errors = []
             if(this.columnFirst.length < 3){
                 this.columnFirst.push(card)
+            }else {
+                this.errors.push('В первой колонке нельзя добавить больше 3-х карточек.')
             }
         })
         eventBus.$on('addColumnSecond', card => {
+            this.errors = []
             if(this.columnSecond.length < 5){
                 this.columnSecond.push(card)
                 this.columnFirst.splice(this.columnFirst.indexOf(card), 1)
+            }else if (this.columnSecond.length === 5) {
+                this.errors.push('Во второй колонке не должно быть больше 5-и карточек')
+                if(this.columnFirst.length > 0) {
+                    this.columnFirst.forEach(item => {
+                        item.arrTask.forEach(item => {
+                            item.completed = true;
+                        })
+                    })
+                }
             }
         })
         eventBus.$on('addColumnThird', card =>{
             this.columnThird.push(card)
             this.columnSecond.splice(this.columnSecond.indexOf(card), 1)
+
+            if(this.columnSecond.length < 5) {
+                if(this.columnFirst.length > 0) {
+                    this.columnFirst.forEach(item => {
+                        item.arrTask.forEach(item => {
+                            item.completed = false;
+                        })
+                    })
+                }
+            }
         })
         eventBus.$on('addColumnOneThird', card =>{
-            this.columnThird.push(card)
-            this.columnFirst.splice(this.columnFirst.indexOf(card), 1)
+
+            if (this.columnSecond.length >= 5) {
+                this.errors.push("Вы не можете редактировать первую колонку, пока есть во второй есть 5 карточек")
+            } else {
+                this.columnThird.push(card)
+                this.columnFirst.splice(this.columnFirst.indexOf(card), 1)
+            }
         })
-        this.columnFirst = JSON.parse(localStorage.getItem("columnFirst"))
-        this.columnSecond = JSON.parse(localStorage.getItem("columnSecond"))
-        this.columnThird = JSON.parse(localStorage.getItem("columnThird"))
+
     },
-    methods: {
-        saveLocal() {
-            localStorage.setItem('columnFirst', JSON.stringify(this.columnFirst))
-            localStorage.setItem('columnSecond', JSON.stringify(this.columnSecond))
-            localStorage.setItem('columnThird', JSON.stringify(this.columnThird))
-        }
-    }
+
 })
 
 Vue.component('Columns1', {
@@ -86,10 +108,9 @@ Vue.component('Columns1', {
             type: Array,
 
         },
-        saveLocal: {
-            type: Function
+        errors: {
+            type: Array,
         }
-
     },
     methods: {
         updateColumn(card) {
@@ -106,7 +127,6 @@ Vue.component('Columns1', {
                 card.data = new Date().toLocaleString()
                 eventBus.$emit('addColumnOneThird', card)
             }
-            this.saveLocal()
         },
     },
 
@@ -135,10 +155,6 @@ Vue.component('Columns2', {
             type: Array,
 
         },
-        saveLocal: {
-            type: Function
-        }
-
     },
     methods: {
         updateColumnTwo(card) {
@@ -152,7 +168,6 @@ Vue.component('Columns2', {
                 card.data = new Date().toLocaleString()
                 eventBus.$emit('addColumnThird', card)
             }
-            this.saveLocal()
         },
     },
 
@@ -200,19 +215,19 @@ Vue.component('modalWindow', {
                 <form @submit.prevent="createCard">
                   <div class="form_create">
                     <label for="name">Напишите название:</label>
-                    <input class="form_input" id="task" v-model="name" placeholder="Введите название"/>
+                    <input required class="form_input" id="task" v-model="name" placeholder="Введите название"/>
 
                     <div class="numberOne">
                       <label for="name">Добавить задачу №1:</label>
-                      <input class="form_input" id="task1" v-model="name1" placeholder="Введите задачу"/>
+                      <input required class="form_input" id="task1" v-model="name1" placeholder="Введите задачу"/>
                     </div>
                     <div class="form_div">
                       <label for="name">Добавить задачу №2:</label>
-                      <input class="form_input" id="task2" v-model="name2" placeholder="Введите задачу"/>
+                      <input required class="form_input" id="task2" v-model="name2" placeholder="Введите задачу"/>
                     </div>
                     <div class="form_div">
                       <label for="name">Добавить задачу №3:</label>
-                      <input class="form_input" id="task3" v-model="name3" placeholder="Введите задачу"/>
+                      <input required class="form_input" id="task3" v-model="name3" placeholder="Введите задачу"/>
                     </div>
                     <div class="form_div">
                       <label for="name">Добавить задачу №4:</label>
@@ -222,7 +237,7 @@ Vue.component('modalWindow', {
                       <label for="name">Добавить задачу №5:</label>
                       <input class="form_input" id="task5" v-model="name5" placeholder="Введите задачу">
                     </div>
-                    <button class="form_submit" @click="persist">Добавить</button>
+                    <button class="form_submit">Добавить</button>
                   </div>
                 </form>
               </div>
@@ -239,6 +254,7 @@ Vue.component('modalWindow', {
             name3:null,
             name4:null,
             name5:null,
+            errors: [],
 
 
         }
@@ -254,7 +270,8 @@ Vue.component('modalWindow', {
                         {id: 5, title: this.name5, completed: false},
                     ],
                     data: null,
-                    status: 0
+                    status: 0,
+                    errors: [],
                 }
                 eventBus.$emit('card-submitted', card)
                     this.name = null
@@ -265,23 +282,6 @@ Vue.component('modalWindow', {
                     this.name4 = null
                     this.name5 = null
             },
-            persist() {
-                localStorage.name = this.name;
-                localStorage.name1 = this.name1;
-                localStorage.name2 = this.name2;
-                localStorage.name3 = this.name3;
-                localStorage.name4 = this.name4;
-                localStorage.name5 = this.name5;
-            }
-
-    },
-    mounted() {
-        if(localStorage.name) this.name = localStorage.name;
-        if(localStorage.name1) this.name1 = localStorage.name1;
-        if(localStorage.name2) this.name2 = localStorage.name2;
-        if(localStorage.name3) this.name3 = localStorage.name3;
-        if(localStorage.name4) this.name4 = localStorage.name4;
-        if(localStorage.name5) this.name5 = localStorage.name5;
     },
 
     props: {
@@ -289,9 +289,6 @@ Vue.component('modalWindow', {
             type: Array,
             required: false,
         },
-        saveLocal: {
-            type: Function
-        }
     },
 })
 
