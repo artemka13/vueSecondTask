@@ -152,7 +152,6 @@ Vue.component('Columns1', {
                 card.data = new Date().toLocaleString()
                 eventBus.$emit('addColumnOneThird', card)
             }
-            this.saveLocal()
         },
     },
 
@@ -197,7 +196,6 @@ Vue.component('Columns2', {
                 card.data = new Date().toLocaleString()
                 eventBus.$emit('addColumnThird', card)
             }
-            this.saveLocal()
         },
     },
 
@@ -247,27 +245,27 @@ Vue.component('modalWindow', {
               <div class="modal-body">
                 <form @submit.prevent="createCard">
                   <div class="form_create">
-                    <label for="name">Напишите название:</label>
+                    <label for="task">Напишите название:</label>
                     <input required class="form_input" id="task" v-model="name" placeholder="Введите название"/>
 
                     <div class="numberOne">
-                      <label for="name">Добавить задачу №1:</label>
+                      <label for="task1">Добавить задачу №1:</label>
                       <input required class="form_input" id="task1" v-model="name1" placeholder="Введите задачу"/>
                     </div>
                     <div class="form_div">
-                      <label for="name">Добавить задачу №2:</label>
+                      <label for="task2">Добавить задачу №2:</label>
                       <input required class="form_input" id="task2" v-model="name2" placeholder="Введите задачу"/>
                     </div>
                     <div class="form_div">
-                      <label for="name">Добавить задачу №3:</label>
+                      <label for="task3">Добавить задачу №3:</label>
                       <input required class="form_input" id="task3" v-model="name3" placeholder="Введите задачу"/>
                     </div>
                     <div class="form_div">
-                      <label for="name">Добавить задачу №4:</label>
+                      <label for="task4">Добавить задачу №4:</label>
                       <input class="form_input" id="task4" v-model="name4" placeholder="Введите задачу">
                     </div>
                     <div class="form_div">
-                      <label for="name">Добавить задачу №5:</label>
+                      <label for="task5">Добавить задачу №5:</label>
                       <input class="form_input" id="task5" v-model="name5" placeholder="Введите задачу">
                     </div>
                     <button class="form_submit">Добавить</button>
@@ -312,7 +310,7 @@ Vue.component('modalWindow', {
                     this.name3 = null
                     this.name4 = null
                     this.name5 = null
-                    this.saveLocal()
+
             },
     },
 
