@@ -110,11 +110,10 @@ Vue.component('Columns1', {
                 <span>
                     <li v-for="task in column.arrTask" v-if="task.title != null" >
                             <strong>{{task.id}}</strong>
-                            <input type="checkbox" 
-                            task.completed = "true" 
-                            :disabled="task.completed" 
-                            v-on:change="column.status += 1"
-                            @change.prevent="updateColumn(column)">
+                            <input name="check1" type="checkbox" 
+                            @click="changeCompleted(card, task)"
+                            
+                            >
                             <span :class="{done: task.completed}" >{{task.title}}</span>
                     </li>
                 </span>
@@ -140,8 +139,8 @@ Vue.component('Columns1', {
     methods: {
         updateColumn(card) {
             let cardTask = 0
-            for(let i = 0; i < 5; i++){
-                if (card.arrTask[i].title != null) {
+            for(let i = 0; i < 6; i++){
+                if (card.arrTask[i] != null) {
                     cardTask++
                 }
             }
@@ -164,7 +163,7 @@ Vue.component('Columns2', {
                 <span>
                     <li v-for="task in column.arrTask" v-if="task.title != null" >
                             <strong>{{task.id}}</strong>
-                            <input type="checkbox" 
+                            <input name="check2" type="checkbox" 
                             task.completed = "true" 
                             :disabled="task.completed" 
                             v-on:change="column.status += 1"
@@ -187,8 +186,8 @@ Vue.component('Columns2', {
     methods: {
         updateColumnTwo(card) {
             let cardTask = 0
-            for(let i = 0; i < 5; i++){
-                if (card.arrTask[i].title != null) {
+            for(let i = 0; i < 6; i++){
+                if (card.arrTask[i] != null) {
                     cardTask++
                 }
             }
@@ -208,7 +207,7 @@ Vue.component('Columns3', {
                 <span>
                     <li v-for="task in column.arrTask" v-if="task.title != null" >
                             <strong>{{task.id}}</strong>
-                            <input type="checkbox" 
+                            <input name="check3" type="checkbox" 
                             :disabled="task.completed" 
                             >
                             <span :class="{done: task.completed}" >{{task.title}}</span>
@@ -231,96 +230,75 @@ Vue.component('Columns3', {
 
 Vue.component('modalWindow', {
     template: `
-      <section>
-        <div class="bu">
-          <a href="#openModal" class="btn btnModal">Создать карточку</a>
-        </div>
-        <div id="openModal" class="modal">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h3 class="modal-title">Создание карточки</h3>
-                <a href="#close" title="Close" class="close">×</a>
+    <section>
+    <div class="bu">
+      <a href="#openModal" class="btn btnModal">Создать карточку</a>
+    </div>
+    <div id="openModal" class="modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title">Создание карточки</h3>
+            <a href="#close" title="Close" class="close">×</a>
+          </div>
+          <div class="modal-body">
+            <form @submit.prevent="createCard">
+              <div class="form_create">
+                <label for="task">Напишите название:</label>
+                <input required class="form_input" id="task" v-model="name" placeholder="Введите название"/>
+                <div class="form_div" v-for="(task, index) in tasks" :key="index">
+                  <label :for="'task' + index">Добавить задачу №{{ index + 1 }}:</label>
+                  <input required class="form_input" :id="'task' + index" v-model="tasks[index]" :placeholder="'Введите задачу'"/>
+                  <button @click="removeTask(index)">Удалить</button>
+                </div>
+                <button @click="addTask" class="form_submit">Добавить еще поле</button>
+                <button type="submit" class="form_submit">Добавить</button>
               </div>
-              <div class="modal-body">
-                <form @submit.prevent="createCard">
-                  <div class="form_create">
-                    <label for="task">Напишите название:</label>
-                    <input required class="form_input" id="task" v-model="name" placeholder="Введите название"/>
-
-                    <div class="numberOne">
-                      <label for="task1">Добавить задачу №1:</label>
-                      <input required class="form_input" id="task1" v-model="name1" placeholder="Введите задачу"/>
-                    </div>
-                    <div class="form_div">
-                      <label for="task2">Добавить задачу №2:</label>
-                      <input required class="form_input" id="task2" v-model="name2" placeholder="Введите задачу"/>
-                    </div>
-                    <div class="form_div">
-                      <label for="task3">Добавить задачу №3:</label>
-                      <input required class="form_input" id="task3" v-model="name3" placeholder="Введите задачу"/>
-                    </div>
-                    <div class="form_div">
-                      <label for="task4">Добавить задачу №4:</label>
-                      <input class="form_input" id="task4" v-model="name4" placeholder="Введите задачу">
-                    </div>
-                    <div class="form_div">
-                      <label for="task5">Добавить задачу №5:</label>
-                      <input class="form_input" id="task5" v-model="name5" placeholder="Введите задачу">
-                    </div>
-                    <button class="form_submit">Добавить</button>
-                  </div>
-                </form>
-              </div>
-            </div>
+            </form>
           </div>
         </div>
-      </section>
-`,
+      </div>
+    </div>
+  </section>
+  `,
     data() {
         return {
             name: null,
-            name1:null,
-            name2:null,
-            name3:null,
-            name4:null,
-            name5:null,
+            tasks: ['','',''],
             errors: [],
         }
     },
-        methods: {
-            createCard() {
-                let card = {
-                    name: this.name,
-                    arrTask: [ {id: 1, title: this.name1, completed: false},
-                        {id: 2, title: this.name2, completed: false},
-                        {id: 3, title: this.name3, completed: false},
-                        {id: 4, title: this.name4, completed: false},
-                        {id: 5, title: this.name5, completed: false},
-                    ],
-                    data: null,
-                    status: 0,
-                    errors: [],
-                }
-                eventBus.$emit('card-submitted', card)
-                    this.name = null
-                    this.arrTask = null
-                    this.name1 = null
-                    this.name2 = null
-                    this.name3 = null
-                    this.name4 = null
-                    this.name5 = null
-
-            },
+    methods: {
+        createCard() {
+            let card = {
+                name: this.name,
+                arrTask: this.tasks.map((task, index) => ({ id: index + 1, title: task, completed: false })),
+                data: null,
+                status: 0,
+                errors: []
+            }
+            eventBus.$emit('card-submitted', card);
+            this.name = null;
+            this.tasks = ['','','']; // Reset the tasks array after submission
+        },
+        addTask() {
+            if (this.tasks.length < 6) {
+                this.tasks.push('');
+            }
+        },
+        removeTask(index) {
+            if (this.tasks.length > 3) {
+                this.tasks.splice(index, 1);
+            }
+        }
     },
-
     props: {
-        columnFirst:{
+        columnFirst: {
             type: Array,
             required: false,
         },
     },
-})
+});
 
 Vue.component('create_card', {
     template: `
