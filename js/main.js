@@ -74,7 +74,7 @@ Vue.component('Cards', {
         eventBus.$on('addColumnOneThird', card =>{
 
             if (this.columnSecond.length >= 5) {
-                this.errors.push("Вы не можете редактировать первую колонку, пока есть во второй есть 5 карточек")
+                this.errors.push("Вы не можете редактировать первую колонку, пока во второй есть 5 карточек")
             } else {
                 this.columnThird.push(card)
                 this.columnFirst.splice(this.columnFirst.indexOf(card), 1)
@@ -110,8 +110,12 @@ Vue.component('Columns1', {
                 <span>
                     <li v-for="task in column.arrTask" v-if="task.title != null" >
                             <strong>{{task.id}}</strong>
-                            <input name="check1" type="checkbox" 
-                            @click="changeCompleted(card, task)"
+                            <input type="checkbox" 
+                            v-model="task.completed"
+                            task.completed = "true" 
+                            :disabled="task.completed" 
+                            v-on:change="column.status += 1"
+                            @change.prevent="updateColumn(column)"
                             
                             >
                             <span :class="{done: task.completed}" >{{task.title}}</span>
@@ -164,6 +168,7 @@ Vue.component('Columns2', {
                     <li v-for="task in column.arrTask" v-if="task.title != null" >
                             <strong>{{task.id}}</strong>
                             <input name="check2" type="checkbox" 
+                            v-model="task.completed"
                             task.completed = "true" 
                             :disabled="task.completed" 
                             v-on:change="column.status += 1"
@@ -208,6 +213,7 @@ Vue.component('Columns3', {
                     <li v-for="task in column.arrTask" v-if="task.title != null" >
                             <strong>{{task.id}}</strong>
                             <input name="check3" type="checkbox" 
+                            v-model="task.completed"
                             :disabled="task.completed" 
                             >
                             <span :class="{done: task.completed}" >{{task.title}}</span>
@@ -249,7 +255,7 @@ Vue.component('modalWindow', {
                 <div class="form_div" v-for="(task, index) in tasks" :key="index">
                   <label :for="'task' + index">Добавить задачу №{{ index + 1 }}:</label>
                   <input required class="form_input" :id="'task' + index" v-model="tasks[index]" :placeholder="'Введите задачу'"/>
-                  <button @click="removeTask(index)">Удалить</button>
+                  <button v-if="index > 2" @click="removeTask(index)">Удалить</button>
                 </div>
                 <button @click="addTask" class="form_submit">Добавить еще поле</button>
                 <button type="submit" class="form_submit">Добавить</button>
