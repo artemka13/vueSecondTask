@@ -106,16 +106,19 @@ Vue.component('Cards', {
 Vue.component('Columns1', {
     template: `
        <div class="Column">
-            <div class="column_div" v-for="column in columnFirst"><h2>{{column.name}}</h2>
+            <div class="column_div" v-for="column in columnFirst" :key="column.name">
+            <h2>{{column.name}}</h2>
                 <span>
-                    <li v-for="task in column.arrTask" v-if="task.title != null" >
+                    <li v-for="(task, taskIndex) in column.arrTask" :key="task.id" v-if="task.title != null" >
                             <strong>{{task.id}}</strong>
                             <input type="checkbox" 
+                            :id="'task-' + task.id" 
+                            :name="'task-' + task.id"
                             v-model="task.completed"
                             task.completed = "true" 
                             :disabled="task.completed" 
                             v-on:change="column.status += 1"
-                            @change.prevent="updateColumn(column)"
+                            @change.prevent="updateColumn(column, task)"
                             
                             >
                             <span :class="{done: task.completed}" >{{task.title}}</span>
@@ -163,16 +166,19 @@ Vue.component('Columns1', {
 Vue.component('Columns2', {
     template: `
        <div class="Column">
-            <div class="column_div" v-for="column in columnSecond"><h2>{{column.name}}</h2>
+            <div class="column_div" v-for="column in columnSecond" :key="column.name">
+            <h2>{{column.name}}</h2>
                 <span>
-                    <li v-for="task in column.arrTask" v-if="task.title != null" >
+                    <li v-for="(task, taskIndex) in column.arrTask" :key="task.id" v-if="task.title != null" >
                             <strong>{{task.id}}</strong>
                             <input name="check2" type="checkbox" 
+                            :id="'task-' + task.id" 
+                            :name="'task-' + task.id"
                             v-model="task.completed"
                             task.completed = "true" 
                             :disabled="task.completed" 
                             v-on:change="column.status += 1"
-                            @change.prevent="updateColumnTwo(column)"
+                            @change.prevent="updateColumnTwo(column, task)"
                             >
                             <span :class="{done: task.completed}" >{{task.title}}</span>
                     </li>
